@@ -1,0 +1,64 @@
+/*
+ *               [PlugSlack]
+ *   Cause only plug wasn't good enough
+ *
+ * Coded by Matheus Avellar ("Beta Tester")
+ *
+ * Most of the stuff here is probably not
+ * the most efficient. But it works. So who cares.
+ *
+ */
+
+
+/* ---- Edits on plug.dj content ---- */
+
+div#chat-button {
+    left: 0;
+    width: 60px;
+}
+
+div#users-button {
+    left: 124px;
+    width: 80px;
+}
+
+div#waitlist-button {
+    left: 205px;
+    width: 80px;
+}
+
+/* ---------------------------------- */
+
+
+/* ---- Actual plugSlack content ---- */
+
+#slack-button.header-panel-button {
+    left: 60px;
+    width: 65px;
+}
+
+#slack-button i.icon {
+    position: relative;
+    top: 13px;
+    display: inline-block;
+    margin: 0 auto;
+}
+
+#slack-button span.request-count {
+    position: absolute;
+    top: 8px;
+    right: 4px;
+    display: none;
+    padding: 0 6px;
+    min-width: 10px;
+    border-radius: 12px;
+    background: #db182e;
+    text-align: center;
+    font-size: 12px;
+}
+
+#slack-button.notify span.request-count {
+    display: block;
+}
+
+/* ---------------------------------- */
