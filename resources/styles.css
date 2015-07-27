@@ -176,10 +176,19 @@ div#ps-actual-chat {
     position: absolute;
     width: 100%;
     bottom: 45px;
+    border-bottom: 1px solid #282C35;
+}
+
+div.ps-message {
+    min-height: 46px;
 }
 
 div.ps-meta {
     font-size: 11px;
+}
+
+div.ps-text {
+    margin-left: 30px;
 }
 
 div.ps-meta div.ps-from,

@@ -11,7 +11,7 @@
 
 "use strict";
 
-// v0.0.15 //
+// v0.0.16 //
 
 const PS_PATH = "https://rawgit.com/MatheusAvellar/plugSlack/master/resources/";
 var ps, slackObj;
@@ -165,16 +165,23 @@ ps = {
             }
         },
         appendMessage: function(from, channel, message, time) {
-            $("#ps-actual-chat").append(
-                "<div class='ps-message'>"
-                +    "<div class='ps-meta'>"
-                +        "<div class='ps-from'>" + from + "</div>"
-                +        "<div class='ps-time'>" + time + "</div>"
-                +        "<div class='ps-channel'>" + channel + "</div>"
-                +    "</div>"
-                +    "<div class='ps-text'>" + message + "</div>"
-                +"</div>"
-            );
+            if (message != "undefined") {
+                const _c = $("div#ps-actual-chat")
+                const _scroll = _c[0].scrollTop > _c[0].scrollHeight -_c.height() - 28;
+                $("#ps-actual-chat").append(
+                    "<div class='ps-message'>"
+                    +    "<div class='ps-meta'>"
+                    +        "<div class='ps-from'>" + from + "</div>"
+                    +        "<div class='ps-time'>" + time + "</div>"
+                    +        "<div class='ps-channel'>" + channel + "</div>"
+                    +    "</div>"
+                    +    "<div class='ps-text'>" + message + "</div>"
+                    +"</div>"
+                );
+                if (_scroll) {
+                    $("div#ps-actual-chat")[0].scrollTop = _c[0].scrollHeight;
+                }
+            }
         }
     }
 };
