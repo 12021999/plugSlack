@@ -11,11 +11,16 @@
 
 "use strict";
 
-// v 0.0.4 //
+// v 0.0.5 //
 
 const PS_PATH = "https://rawgit.com/MatheusAvellar/plugSlack/master/resources/";
+var ps, slackObj;
+$.ajax({
+type: "GET",
+url: PS_PATH + "styles.css",
+success: function(_ajxData) {
 
-var ps = {
+ps = {
     init: function() {
         $("head").append(
             "<link "
@@ -59,12 +64,12 @@ var ps = {
             type: "GET",
             url: "https://slack.com/api/rtm.start?token=" + window.prompt("Insert your token please!", "xxxx-xxxxxxxxx-xxxx"),
             success: function(data) {
-                console.log(data);
-                console.log("Connecting account " + data.self.name);
-                slackWS = new WebSocket(data.url);
+                slackObj = data;
+                console.log("Connecting account " + slackObj.self.name);
+                slackWS = new WebSocket(slackObj.url);
 
                 slackWS.onopen = function(_data){
-                    console.log("Successfully connected account " + data.self.name);
+                    console.log("Successfully connected account " + slackObj.self.name);
                     console.log(_data);
                 }
 
@@ -97,3 +102,9 @@ var ps = {
 };
 
 ps.init();
+
+},
+error: function(msg) {
+    API.chatLog("Error loading CSS! Try again later!");
+}
+});
