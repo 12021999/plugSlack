@@ -11,7 +11,7 @@
 
 "use strict";
 
-// v 0.0.11 //
+// v0.0.12 //
 
 const PS_PATH = "https://rawgit.com/MatheusAvellar/plugSlack/master/resources/";
 var ps, slackObj;
@@ -127,7 +127,7 @@ ps = {
                 console.log("[Status: " + JSON.stringify(data.status) + "]");
             });
         } else {
-            console.log("Please inser a token");
+            console.log("Please insert a token");
         }
     },
     utils: {
