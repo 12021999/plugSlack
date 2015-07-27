@@ -11,8 +11,7 @@
 
 "use strict";
 
-// v0.0.16 //
-
+const version = "v0.0.16";
 const PS_PATH = "https://rawgit.com/MatheusAvellar/plugSlack/master/resources/";
 var ps, slackObj;
 $.ajax({
@@ -30,6 +29,7 @@ success: function(_ajxData) {
 
 ps = {
     init: function() {
+        API.chatLog(version);
         $("div#header-panel-bar").append(
             "<div id='ps-button' class='header-panel-button notify'>"
             +    "<i class='icon icon-star-white'></i>"
