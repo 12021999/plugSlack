@@ -11,7 +11,7 @@
 
 "use strict";
 
-// v0.0.12 //
+// v0.0.13 //
 
 const PS_PATH = "https://rawgit.com/MatheusAvellar/plugSlack/master/resources/";
 var ps, slackObj;
@@ -47,6 +47,7 @@ ps = {
             +    "<div class='channels-list ps-list'></div>"
             +    "<div class='users-list ps-list'></div>"
             +    "<div class='groups-list ps-list'></div>"
+            +    "<div id='ps-actual-chat'></div>"
             +    "<div class='ps-start' onclick='return ps.start();'>Start plugSlack</div>"
             +    "<input id='ps-submit' />"
             +"</div>"
@@ -113,6 +114,16 @@ ps = {
 
                     slackWS.onmessage = function(_data){
                         console.log(_data);
+                        if (_data.type == "message") {
+                            var d = new Date();
+                            var h = d.getHours();
+                            var m = d.getMinutes();
+                            if (h < 10) {  h = "0" + h;  }
+                            if (m < 10) {  m = "0" + m;  }
+                            var _d = JSON.parse(_data.data);
+                            ps.utils.appendMessage(_d.user, _d.channel, _d.text, h + ":" + m);
+                        }
+                        
                     }
 
                     slackWS.onerror = function(_data) {
@@ -152,6 +163,18 @@ ps = {
                     +"</div>"
                 );
             }
+        },
+        appendMessage: function(from, channel, message, time) {
+            $("#ps-actual-chat").append(
+                "<div class='ps-message'>"
+                +    "<div class='ps-meta'>"
+                +        "<div class='ps-from'>" + from + "</div>"
+                +        "<div class='ps-time'>" + time + "</div>"
+                +        "<div class='ps-channel'>" + channel + "</div>"
+                +    "</div>"
+                +    "<div class='ps-text'>" + message + "</div>"
+                +"</div>"
+            );
         }
     }
 };
