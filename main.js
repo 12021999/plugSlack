@@ -11,7 +11,7 @@
 
 "use strict";
 
-// v0.0.14 //
+// v0.0.15 //
 
 const PS_PATH = "https://rawgit.com/MatheusAvellar/plugSlack/master/resources/";
 var ps, slackObj;

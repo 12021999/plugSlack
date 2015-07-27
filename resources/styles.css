@@ -178,4 +178,26 @@ div#ps-actual-chat {
     bottom: 45px;
 }
 
+div.ps-meta {
+    font-size: 11px;
+}
+
+div.ps-meta div.ps-from,
+div.ps-meta div.ps-channel {
+    display: inline;
+    margin-left: 10px;
+    color: #b0b0b0;
+}
+
+div.ps-meta div.ps-channel:before {
+    content: "@";
+}
+
+div.ps-meta div.ps-time {
+    display: inline;
+    right: 10px;
+    position: absolute;
+    color: #555d70;
+}
+
 /* ---------------------------------- */
