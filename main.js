@@ -11,7 +11,7 @@
 
 "use strict";
 
-// v 0.0.10 //
+// v 0.0.11 //
 
 const PS_PATH = "https://rawgit.com/MatheusAvellar/plugSlack/master/resources/";
 var ps, slackObj;
@@ -42,19 +42,22 @@ ps = {
             +    "<div id='ps-header'>"
             +        "<div id='ps-channels-button' class='ps-btn'>channels</div>"
             +        "<div id='ps-users-button' class='ps-btn selected'>users</div>"
+            +        "<div id='ps-groups-button' class='ps-btn'>groups</div>"
             +    "</div>"
-            +    "<div class='channels-list'></div>"
-            +    "<div class='users-list'></div>"
-            +    "<div class='ps-start' onclick='return '>Start plugSlack</div>"
+            +    "<div class='channels-list ps-list'></div>"
+            +    "<div class='users-list ps-list'></div>"
+            +    "<div class='groups-list ps-list'></div>"
+            +    "<div class='ps-start' onclick='return ps.start();'>Start plugSlack</div>"
             +    "<input id='ps-submit' />"
             +"</div>"
         );
 
-        $("div#ps-channels-button, div#ps-users-button").on("click", function() {
+        $("div.ps-btn").on("click", function() {
             $("div.ps-btn").removeClass("selected");
-            $("div.channels-list, div.users-list").hide();
+            $("div.ps-list").hide();
             $(this).addClass("selected");
-            var _sel = $(this).attr("id") == "ps-channels-button" ? "div.channels-list" : "div.users-list";
+            var _sel = $(this).attr("id") == "ps-channels-button" ? "div.channels-list" :
+                       $(this).attr("id") == "ps-users-button" ? "div.users-list" : "div.groups-list";
             $(_sel).show();
         });
 
@@ -80,13 +83,24 @@ ps = {
                     $("div.ps-start").remove();
                     slackObj = data;
                     for (var i = 0, l = slackObj.users.length; i < l; i++) {
-                        if (!slackObj.users[i].deleted) {
-                            ps.utils.appendItem(slackObj.users[i].name, false, slackObj.users[i].presence);
-                        }
+                        if (!slackObj.users[i].deleted)
+                            ps.utils.appendItem(slackObj.users[i].name,
+                                slackObj.users[i].id,
+                                "user",
+                                slackObj.users[i].presence);
                     }
                     for (var i = 0, l = slackObj.channels.length; i < l; i++) {
                         if (!slackObj.channels[i].is_archived && slackObj.channels[i].is_member) {
-                            ps.utils.appendItem(slackObj.channels[i].name, true);
+                            ps.utils.appendItem(slackObj.channels[i].name,
+                                slackObj.channels[i].id,
+                                "channel");
+                        }
+                    }
+                    for (var i = 0, l = slackObj.groups.length; i < l; i++) {
+                        if (!slackObj.channels[i].is_archived && slackObj.channels[i].is_member) {
+                            ps.utils.appendItem(slackObj.channels[i].name,
+                                slackObj.channels[i].id,
+                                "group");
                         }
                     }
                     console.log("Connecting account " + slackObj.self.name);
@@ -117,18 +131,24 @@ ps = {
         }
     },
     utils: {
-        appendItem: function(name, isChannel, isOnline) {
-            if (isChannel) {
+        appendItem: function(name, id, tag, isOnline) {
+            if (tag == "channel") {
                 $("div#ps-chat div.channels-list").append(
                     "<div class='channel'>"
                     +    "<div class='channelName'>" + name + "</div>"
                     +"</div>"
                 );
-            } else {
+            } else if (tag == "user") {
                 $("div#ps-chat div.users-list").append(
                     "<div class='user'>"
                     +    "<div class='presence " + isOnline + "'></div>"
                     +    "<div class='username'>" + name + "</div>"
+                    +"</div>"
+                );
+            } else {
+                $("div#ps-chat div.groups-list").append(
+                    "<div class='group'>"
+                    +    "<div class='groupName'>" + name + "</div>"
                     +"</div>"
                 );
             }

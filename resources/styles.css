@@ -64,14 +64,14 @@ div#ps-button.notify span.request-count {
 div#ps-chat {
     height: 100%;
     width: 100%;
+    display: none;
 }
 div#ps-header {
     height: 25px;
     background-color: #282c35;
 }
 
-div#ps-channels-button,
-div#ps-users-button {
+div.ps-btn {
     width: 172px;
     height: 100%;
     float: left;
@@ -80,24 +80,28 @@ div#ps-users-button {
     outline: 1px solid #1c1f25;
     cursor: pointer;
 }
-.ps-btn.selected {
+div.ps-btn.selected {
     background-color: #0a0a0a;
     cursor: default;
 }
 
-div#ps-chat div.channels-list {
+div#ps-chat div.channels-list,
+div#ps-chat div.groups-list {
     display: none;
 }
 
 div#ps-chat div.users-list,
-div#ps-chat div.channels-list {
+div#ps-chat div.channels-list,
+div#ps-chat div.groups-list {
     height: 150px;
     border-bottom: 1px solid #282c35;
     overflow-y: scroll;
     margin-top: 10px;
 }
+
 div#ps-chat div.users-list div.user,
-div#ps-chat div.channels-list div.channel {
+div#ps-chat div.channels-list div.channel,
+div#ps-chat div.groups-list div.group {
     float: left;
     height: 25px;
     width: 160px;
@@ -123,7 +127,8 @@ div#ps-chat div.users-list div.presence.away {
 }
 
 div#ps-chat div.users-list div.user div.username,
-div#ps-chat div.channels-list div.channel div.channelName {
+div#ps-chat div.channels-list div.channel div.channelName,
+div#ps-chat div.groups-list div.group div.groupName {
     margin-top: 4px;
     font-size: 12px;
 }
@@ -132,10 +137,12 @@ div#ps-chat div.users-list div.user div.username {
     margin-left: 25px;
 }
 
-div#ps-chat div.channels-list div.channel div.channelName {
+div#ps-chat div.channels-list div.channel div.channelName,
+div#ps-chat div.groups-list div.group div.groupName {
     margin-left: 15px;
 }
 
+div#ps-chat div.groups-list div.group div.groupName:before,
 div#ps-chat div.channels-list div.channel div.channelName:before {
     content: "# ";
     color: #8694B2;
