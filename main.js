@@ -11,7 +11,7 @@
 
 "use strict";
 
-// v 0.0.7 //
+// v 0.0.8 //
 
 const PS_PATH = "https://rawgit.com/MatheusAvellar/plugSlack/master/resources/";
 var ps, slackObj;
@@ -71,12 +71,12 @@ ps = {
                 slackObj = data;
                 for (var i = 0, l = slackObj.users.length; i < l; i++) {
                     if (!slackObj.users[i].deleted) {
-                        ps.utils.appendItem(slackObj.users[i].name, slackObj.users[i].profile.image_32);
+                        ps.utils.appendItem(slackObj.users[i].name, false, slackObj.users[i].presence);
                     }
                 }
                 for (var i = 0, l = slackObj.channels.length; i < l; i++) {
                     if (!slackObj.channels[i].is_archived && slackObj.channels[i].is_member) {
-                        ps.utils.appendItem(slackObj.channels[i].name);
+                        ps.utils.appendItem(slackObj.channels[i].name, true);
                     }
                 }
                 console.log("Connecting account " + slackObj.self.name);
@@ -104,18 +104,18 @@ ps = {
         });
     },
     utils: {
-        appendItem: function(name, imgURL) {
-            if (!imgURL) {
+        appendItem: function(name, isChannel, isOnline) {
+            if (isChannel) {
                 $("div#ps-chat div.channels-list").append(
                     "<div class='channel'>"
-                    +    "<div class='channelName'>" + name + "</span>"
+                    +    "<div class='channelName'>" + name + "</div>"
                     +"</div>"
                 );
             } else {
                 $("div#ps-chat div.users-list").append(
                     "<div class='user'>"
-                    +    "<div class='img' style='background: url(" + imgURL + ")'></div>"
-                    +    "<div class='username'>" + name + "</span>"
+                    +    "<div class='presence " + isOnline + "'></div>"
+                    +    "<div class='username'>" + name + "</div>"
                     +"</div>"
                 );
             }
