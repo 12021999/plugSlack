@@ -11,7 +11,7 @@
 
 "use strict";
 
-// v 0.0.6 //
+// v 0.0.7 //
 
 const PS_PATH = "https://rawgit.com/MatheusAvellar/plugSlack/master/resources/";
 var ps, slackObj;
@@ -19,16 +19,18 @@ $.ajax({
 type: "GET",
 url: PS_PATH + "styles.css",
 success: function(_ajxData) {
+    console.log("Successfully loaded the CSS");
+    $("head").append(
+        "<link "
+        +    " rel='stylesheet' "
+        +    " type='text/css' "
+        +    " href='" + PS_PATH + "styles.css'"
+        + ">"
+    );
 
 ps = {
     init: function() {
-        $("head").append(
-            "<link "
-            +    " rel='stylesheet' "
-            +    " type='text/css' "
-            +    " href='" + PS_PATH + "styles.css'"
-            + ">"
-        );
+
 
         $("div#header-panel-bar").append(
             "<div id='ps-button' class='header-panel-button notify'>"
@@ -43,6 +45,7 @@ ps = {
             +        "<div id='ps-channels-button' class='ps-btn'>channels</div>"
             +        "<div id='ps-users-button' class='ps-btn selected'>users</div>"
             +    "</div>"
+            +    "<div class='channels-list'></div>"
             +    "<div class='users-list'></div>"
             +"</div>"
         );
@@ -55,6 +58,7 @@ ps = {
         $("div#ps-button").on("click", function() {
             $(".header-panel-button").removeClass("selected");
             $("#chat, #user-lists, #waitlist, div.app-right div.friends").hide();
+            $("#ps-chat").show();
             $("div#ps-button").addClass("selected");
         });
     },
@@ -67,7 +71,12 @@ ps = {
                 slackObj = data;
                 for (var i = 0, l = slackObj.users.length; i < l; i++) {
                     if (!slackObj.users[i].deleted) {
-                        ps.utils.appendUser(slackObj.users[i].name, slackObj.users[i].profile.image_32);
+                        ps.utils.appendItem(slackObj.users[i].name, slackObj.users[i].profile.image_32);
+                    }
+                }
+                for (var i = 0, l = slackObj.channels.length; i < l; i++) {
+                    if (!slackObj.channels[i].is_archived && slackObj.channels[i].is_member) {
+                        ps.utils.appendItem(slackObj.channels[i].name);
                     }
                 }
                 console.log("Connecting account " + slackObj.self.name);
@@ -95,13 +104,21 @@ ps = {
         });
     },
     utils: {
-        appendUser: function(username, imgURL) {
-            $("div#ps-chat div.users-list").append(
-                "<div class='user'>"
-                +    "<div class='img' style='background: url(" + imgURL + ")'></div>"
-                +    "<div class='username'>" + username + "</span>"
-                +"</div>"
-            );
+        appendItem: function(name, imgURL) {
+            if (!imgURL) {
+                $("div#ps-chat div.channels-list").append(
+                    "<div class='channel'>"
+                    +    "<div class='channelName'>" + name + "</span>"
+                    +"</div>"
+                );
+            } else {
+                $("div#ps-chat div.users-list").append(
+                    "<div class='user'>"
+                    +    "<div class='img' style='background: url(" + imgURL + ")'></div>"
+                    +    "<div class='username'>" + name + "</span>"
+                    +"</div>"
+                );
+            }
         }
     }
 };
