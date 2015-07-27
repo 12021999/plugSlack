@@ -11,7 +11,7 @@
 
 "use strict";
 
-const version = "v0.0.18";
+const version = "v0.0.19";
 const PS_PATH = "https://rawgit.com/MatheusAvellar/plugSlack/master/resources/";
 var ps, slackObj;
 $.ajax({
@@ -168,7 +168,8 @@ ps = {
             }
         },
         appendMessage: function(from, channel, message, time) {
-            if (message.toString() != "undefined") {
+            if (message) {
+                from = !from ? "" : from;
                 message = message.split("<").join("&lt;").split(">").join("&gt;");
                 const _c = $("div#ps-actual-chat")
                 const _scroll = _c[0].scrollTop > _c[0].scrollHeight -_c.height() - 28;
