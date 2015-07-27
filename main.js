@@ -11,7 +11,7 @@
 
 "use strict";
 
-const version = "v0.0.16";
+const version = "v0.0.17";
 const PS_PATH = "https://rawgit.com/MatheusAvellar/plugSlack/master/resources/";
 var ps, slackObj;
 $.ajax({
@@ -48,7 +48,10 @@ ps = {
             +    "<div class='users-list ps-list'></div>"
             +    "<div class='groups-list ps-list'></div>"
             +    "<div id='ps-actual-chat'></div>"
-            +    "<div class='ps-start' onclick='return ps.start();'>Start plugSlack</div>"
+            +    "<div class='ps-start' onclick='return ps.start();'>"
+            +         "<input id='ps-token' placeholder='Insert your token here!'>"
+            +         "Start plugSlack"
+            +    "</div>"
             +    "<input id='ps-submit' />"
             +"</div>"
         );
@@ -57,7 +60,7 @@ ps = {
             $("div.ps-btn").removeClass("selected");
             $("div.ps-list").hide();
             $(this).addClass("selected");
-            var _sel = $(this).attr("id") == "ps-channels-button" ? "div.channels-list" :
+            const _sel = $(this).attr("id") == "ps-channels-button" ? "div.channels-list" :
                        $(this).attr("id") == "ps-users-button" ? "div.users-list" : "div.groups-list";
             $(_sel).show();
         });
@@ -76,10 +79,10 @@ ps = {
     },
     start: function() {
         var slackWS;
-        if ($("input#ps-submit").val()) {
+        if ($("input#ps-token").val()) {
             $.ajax({
                 type: "GET",
-                url: "https://slack.com/api/rtm.start?token=" + $("input#ps-submit").val(),
+                url: "https://slack.com/api/rtm.start?token=" + $("input#ps-token").val(),
                 success: function(data) {
                     $("div.ps-start").remove();
                     slackObj = data;
@@ -115,12 +118,12 @@ ps = {
                     slackWS.onmessage = function(_data){
                         console.log(_data);
                         if (_data.type == "message") {
-                            var d = new Date();
-                            var h = d.getHours();
-                            var m = d.getMinutes();
+                            const d = new Date();
+                            const h = d.getHours();
+                            const m = d.getMinutes();
                             if (h < 10) {  h = "0" + h;  }
                             if (m < 10) {  m = "0" + m;  }
-                            var _d = JSON.parse(_data.data);
+                            const _d = JSON.parse(_data.data);
                             ps.utils.appendMessage(_d.user, _d.channel, _d.text, h + ":" + m);
                         }
                         
@@ -165,7 +168,7 @@ ps = {
             }
         },
         appendMessage: function(from, channel, message, time) {
-            if (message != "undefined") {
+            if (message.toString() != "undefined") {
                 const _c = $("div#ps-actual-chat")
                 const _scroll = _c[0].scrollTop > _c[0].scrollHeight -_c.height() - 28;
                 $("#ps-actual-chat").append(
