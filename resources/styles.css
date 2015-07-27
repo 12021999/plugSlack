@@ -160,7 +160,6 @@ div.ps-start {
     width: calc(100% - 40px);
     padding-top: 10px;
     margin: 0px;
-    margin-left: calc(25% - 10px);
 }
 
 input#ps-token {
