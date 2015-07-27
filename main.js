@@ -11,7 +11,7 @@
 
 "use strict";
 
-// v0.0.13 //
+// v0.0.14 //
 
 const PS_PATH = "https://rawgit.com/MatheusAvellar/plugSlack/master/resources/";
 var ps, slackObj;
@@ -98,9 +98,9 @@ ps = {
                         }
                     }
                     for (var i = 0, l = slackObj.groups.length; i < l; i++) {
-                        if (!slackObj.channels[i].is_archived && slackObj.channels[i].is_member) {
-                            ps.utils.appendItem(slackObj.channels[i].name,
-                                slackObj.channels[i].id,
+                        if (!slackObj.groups[i].is_archived) {
+                            ps.utils.appendItem(slackObj.groups[i].name,
+                                slackObj.groups[i].id,
                                 "group");
                         }
                     }
