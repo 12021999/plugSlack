@@ -50,6 +50,35 @@ var ps = {
             $("#chat, #user-lists, #waitlist, div.app-right div.friends").hide();
             $("div#slack-button").addClass("selected");
         });
+
+        var slackWS;
+        $.ajax({
+            type: "GET",
+            url: "https://slack.com/api/rtm.start?token=" + window.prompt("Insert your token please!", "xxxx-xxxxxxxxx-xxxx"),
+            success: function(data) {
+                console.log(data);
+                console.log("Connecting account " + data.self.name);
+                slackWS = new WebSocket(data.url);
+
+                slackWS.onopen = function(){
+                    console.log("Successfully connected account " + data.self.name);
+                }
+
+                slackWS.onmessage = function(data){
+                    console.log(data);
+                }
+
+                slackWS.onerror = function(data) {
+                    console.log(data);
+                }
+            },
+            error: function(data) {
+                console.log("Error authenticating");
+                console.log(data);
+            }
+        }).done(function(data) {
+            console.log("[Status: " + JSON.stringify(data.status) + "]");
+        });
     },
     utils: {
         appendUser: function(username, imgURL) {
@@ -64,29 +93,3 @@ var ps = {
 };
 
 ps.init();
-
-var slackWS;
-$.ajax({
-    type: "GET",
-    /*contentType: "application/json",*/
-    url: "https://slack.com/api/rtm.start?token=" + "xoxp-2231677876-3178257956-8220839974-7e0386",
-    success: function(data) {
-        console.log(data);
-        console.log("Connecting account " + data.self.name);
-        /*slackWS = new WebSocket(data.url);
-
-        slackWS.onopen() = function(){
-            console.log("Successfully connected account " + data.self.name);
-        }
-
-        slackWS.onmessage() = function(msg){
-            alert(msg);
-        }*/
-    },
-    error: function(data) {
-        console.log("Error authenticating");
-        console.log(data);
-    }
-}).done(function(data) {
-    console.log("[Status: " + JSON.stringify(data.status) + "]");
-});
