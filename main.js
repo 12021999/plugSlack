@@ -11,7 +11,7 @@
 
 "use strict";
 
-// v 0.0.8 //
+// v 0.0.9 //
 
 const PS_PATH = "https://rawgit.com/MatheusAvellar/plugSlack/master/resources/";
 var ps, slackObj;
@@ -30,8 +30,6 @@ success: function(_ajxData) {
 
 ps = {
     init: function() {
-
-
         $("div#header-panel-bar").append(
             "<div id='ps-button' class='header-panel-button notify'>"
             +    "<i class='icon icon-star-white'></i>"
@@ -47,8 +45,18 @@ ps = {
             +    "</div>"
             +    "<div class='channels-list'></div>"
             +    "<div class='users-list'></div>"
+            +    "<div class='ps-start'></div>"
+            +    "<input id='ps-submit' />"
             +"</div>"
         );
+
+        $("div#ps-channels-button, div#ps-users-button").on("click", function() {
+            $("div.ps-btn").removeClass("selected");
+            $("div.channels-list, div.users-list").hide();
+            $(this).addClass("selected");
+            var _sel = $(this).attr("id") == "ps-channels-button" ? "div.channels-list" : "div.users-list";
+            $(_sel).show();
+        });
 
         $("div#chat-button, div#users-button, div#waitlist-button, div#friends-button").on("click", function() {
             $("div#ps-button").removeClass("selected");
