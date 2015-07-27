@@ -11,7 +11,7 @@
 
 "use strict";
 
-// v 0.0.5 //
+// v 0.0.6 //
 
 const PS_PATH = "https://rawgit.com/MatheusAvellar/plugSlack/master/resources/";
 var ps, slackObj;
@@ -65,6 +65,11 @@ ps = {
             url: "https://slack.com/api/rtm.start?token=" + window.prompt("Insert your token please!", "xxxx-xxxxxxxxx-xxxx"),
             success: function(data) {
                 slackObj = data;
+                for (var i = 0, l = slackObj.users.length; i < l; i++) {
+                    if (!slackObj.users[i].deleted) {
+                        ps.utils.appendUser(slackObj.users[i].name, slackObj.users[i].profile.image_32);
+                    }
+                }
                 console.log("Connecting account " + slackObj.self.name);
                 slackWS = new WebSocket(slackObj.url);
 
