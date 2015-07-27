@@ -32,19 +32,19 @@ div#waitlist-button {
 
 /* ---- Actual plugSlack content ---- */
 
-div#slack-button.header-panel-button {
+div#ps-button.header-panel-button {
     left: 60px;
     width: 65px;
 }
 
-div#slack-button i.icon {
+div#ps-button i.icon {
     position: relative;
     top: 13px;
     display: inline-block;
     margin: 0 auto;
 }
 
-div#slack-button span.request-count {
+div#ps-button span.request-count {
     position: absolute;
     top: 8px;
     right: 4px;
@@ -57,20 +57,21 @@ div#slack-button span.request-count {
     font-size: 12px;
 }
 
-div#slack-button.notify span.request-count {
+div#ps-button.notify span.request-count {
     display: block;
 }
 
-div#slack-chat {
+div#ps-chat {
     height: 100%;
     width: 100%;
 }
-div#slack-header {
+div#ps-header {
     height: 25px;
     background-color: #282C35;
 }
 
-div#channels-button {
+div#ps-channels-button,
+div#ps-users-button {
     width: 172px;
     height: 100%;
     float: left;
@@ -78,18 +79,18 @@ div#channels-button {
     font-variant: small-caps;
 }
 
-div#slack-chat div.users-list {
+div#ps-chat div.users-list {
     height: 150px;
     border-bottom: 1px solid #282C35;
 }
-div#slack-chat div.users-list div.user {
+div#ps-chat div.users-list div.user {
     float: left;
     height: 50px;
     width: 160px;
     background-color: #282C35;
 }
 
-div#slack-chat div.users-list div.user div.img {
+div#ps-chat div.users-list div.user div.img {
     height: 32px;
     width: 32px;
     float: left;
@@ -98,7 +99,7 @@ div#slack-chat div.users-list div.user div.img {
     margin-right: 9px;
     margin-left: 9px;
 }
-div#slack-chat div.users-list div.user div.username {
+div#ps-chat div.users-list div.user div.username {
     margin-top: 15px;
     position: absolute;
     font-size: 12px;
