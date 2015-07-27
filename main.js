@@ -40,7 +40,7 @@ var ps = {
             +"</div>"
         );
 
-        $(".header-panel-button").on("click", function() {
+        $("div#chat-button, div#users-button, div#waitlist-button, div#friends-button").on("click", function() {
             $("div#slack-button").removeClass("selected");
             $("#slack-chat").hide();
         });
@@ -60,16 +60,17 @@ var ps = {
                 console.log("Connecting account " + data.self.name);
                 slackWS = new WebSocket(data.url);
 
-                slackWS.onopen = function(){
+                slackWS.onopen = function(_data){
                     console.log("Successfully connected account " + data.self.name);
+                    console.log(_data);
                 }
 
-                slackWS.onmessage = function(data){
-                    console.log(data);
+                slackWS.onmessage = function(_data){
+                    console.log(_data);
                 }
 
-                slackWS.onerror = function(data) {
-                    console.log(data);
+                slackWS.onerror = function(_data) {
+                    console.log(_data);
                 }
             },
             error: function(data) {
