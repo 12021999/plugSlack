@@ -11,7 +11,7 @@
 
 "use strict";
 
-// v 0.0.9 //
+// v 0.0.10 //
 
 const PS_PATH = "https://rawgit.com/MatheusAvellar/plugSlack/master/resources/";
 var ps, slackObj;
@@ -45,7 +45,7 @@ ps = {
             +    "</div>"
             +    "<div class='channels-list'></div>"
             +    "<div class='users-list'></div>"
-            +    "<div class='ps-start'></div>"
+            +    "<div class='ps-start' onclick='return '>Start plugSlack</div>"
             +    "<input id='ps-submit' />"
             +"</div>"
         );
@@ -72,44 +72,49 @@ ps = {
     },
     start: function() {
         var slackWS;
-        $.ajax({
-            type: "GET",
-            url: "https://slack.com/api/rtm.start?token=" + window.prompt("Insert your token please!", "xxxx-xxxxxxxxx-xxxx"),
-            success: function(data) {
-                slackObj = data;
-                for (var i = 0, l = slackObj.users.length; i < l; i++) {
-                    if (!slackObj.users[i].deleted) {
-                        ps.utils.appendItem(slackObj.users[i].name, false, slackObj.users[i].presence);
+        if ($("input#ps-submit").val()) {
+            $.ajax({
+                type: "GET",
+                url: "https://slack.com/api/rtm.start?token=" + $("input#ps-submit").val(),
+                success: function(data) {
+                    $("div.ps-start").remove();
+                    slackObj = data;
+                    for (var i = 0, l = slackObj.users.length; i < l; i++) {
+                        if (!slackObj.users[i].deleted) {
+                            ps.utils.appendItem(slackObj.users[i].name, false, slackObj.users[i].presence);
+                        }
                     }
-                }
-                for (var i = 0, l = slackObj.channels.length; i < l; i++) {
-                    if (!slackObj.channels[i].is_archived && slackObj.channels[i].is_member) {
-                        ps.utils.appendItem(slackObj.channels[i].name, true);
+                    for (var i = 0, l = slackObj.channels.length; i < l; i++) {
+                        if (!slackObj.channels[i].is_archived && slackObj.channels[i].is_member) {
+                            ps.utils.appendItem(slackObj.channels[i].name, true);
+                        }
                     }
-                }
-                console.log("Connecting account " + slackObj.self.name);
-                slackWS = new WebSocket(slackObj.url);
+                    console.log("Connecting account " + slackObj.self.name);
+                    slackWS = new WebSocket(slackObj.url);
 
-                slackWS.onopen = function(_data){
-                    console.log("Successfully connected account " + slackObj.self.name);
-                    console.log(_data);
-                }
+                    slackWS.onopen = function(_data){
+                        console.log("Successfully connected account " + slackObj.self.name);
+                        console.log(_data);
+                    }
 
-                slackWS.onmessage = function(_data){
-                    console.log(_data);
-                }
+                    slackWS.onmessage = function(_data){
+                        console.log(_data);
+                    }
 
-                slackWS.onerror = function(_data) {
-                    console.log(_data);
+                    slackWS.onerror = function(_data) {
+                        console.log(_data);
+                    }
+                },
+                error: function(data) {
+                    console.log("Error authenticating");
+                    console.log(data);
                 }
-            },
-            error: function(data) {
-                console.log("Error authenticating");
-                console.log(data);
-            }
-        }).done(function(data) {
-            console.log("[Status: " + JSON.stringify(data.status) + "]");
-        });
+            }).done(function(data) {
+                console.log("[Status: " + JSON.stringify(data.status) + "]");
+            });
+        } else {
+            console.log("Please inser a token");
+        }
     },
     utils: {
         appendItem: function(name, isChannel, isOnline) {

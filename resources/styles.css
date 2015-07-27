@@ -132,8 +132,13 @@ div#ps-chat div.users-list div.user div.username {
     margin-left: 25px;
 }
 
+div#ps-chat div.channels-list div.channel div.channelName {
+    margin-left: 15px;
+}
+
 div#ps-chat div.channels-list div.channel div.channelName:before {
     content: "# ";
+    color: #8694B2;
 }
 
 div.ps-start {
