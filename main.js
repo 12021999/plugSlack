@@ -11,9 +11,9 @@
 
 "use strict";
 
-const version = "v0.0.26";
+const version = "v0.0.27";
 const PS_PATH = "https://rawgit.com/MatheusAvellar/plugSlack/master/resources/";
-var ps, slackObj;
+var ps, slackObj, tkn;
 var _all = {
     users: {},
     channels: {}
@@ -33,6 +33,7 @@ success: function(_ajxData) {
     );
 
 ps = {
+    you: {},
     init: function() {
         API.chatLog(version);
         $("div#header-panel-bar").append(
@@ -84,10 +85,11 @@ ps = {
     },
     start: function() {
         var slackWS;
-        if ($("input#ps-token").val().trim()) {
+        tkn = $("input#ps-token").val().trim();
+        if (tkn) {
             $.ajax({
                 type: "GET",
-                url: "https://slack.com/api/rtm.start?token=" + $("input#ps-token").val().trim(),
+                url: "https://slack.com/api/rtm.start?token=" + tkn,
                 success: function(data) {
                     $("div.ps-start").remove();
                     slackObj = data;
@@ -142,14 +144,13 @@ ps = {
 
                     slackWS.onmessage = function(_data){
                         console.log(_data);
-                        if (_data.type == "message") {
+                        const _d = JSON.parse(_data.data);
+                        if (_d.type == "message") {
                             const d = new Date();
-                            const h = d.getHours();
-                            const m = d.getMinutes();
+                            var h = d.getHours();
+                            var m = d.getMinutes();
                             if (h < 10) {  h = "0" + h;  }
                             if (m < 10) {  m = "0" + m;  }
-                            const _d = JSON.parse(_data.data);
-                            console.log(_d);
                             if (_all.users[_d.user]) {
                                 ps.utils.appendMessage(
                                     {
@@ -163,8 +164,11 @@ ps = {
                                     }
                                 );
                             }
+                        } else if (_d.type == "presence_change" || _d.type == "manual_presence_change") {
+                            var _user = _d.user ? _d.user : slackObj.self.id;
+                            $("div.users-list div.user[ps-uid^='" + _user + "'] div.presence")
+                                .attr("class", "presence " + _d.presence);
                         }
-                        
                     }
 
                     slackWS.onerror = function(_data) {

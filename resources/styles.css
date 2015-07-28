@@ -119,6 +119,18 @@ div#ps-chat div.users-list div.presence {
     margin-top: 7px;
     margin-left: 7px;
 }
+
+div#ps-chat div.users-list div.user[ps-uid^='USLACKBOT'] div.presence {
+    color: #89be6c !important;
+    background-color: transparent !important;
+    border: none !important;
+    margin: 3px 0px 0px 6px !important;
+}
+div#ps-chat div.users-list div.user[ps-uid^='USLACKBOT'] div.presence:before {
+    content: "❤";
+}
+
+
 div#ps-chat div.users-list div.presence.active {
     background-color: #89be6c !important;
 }
