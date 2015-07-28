@@ -200,8 +200,19 @@ div.ps-message {
     padding: 5px 8px 6px 0px;
 }
 
+div.ps-prof {
+    height: 32px;
+    width: 32px;
+    position: absolute;
+    display: inline;
+    background-color: #fff;
+    margin-left: 10px;
+    border-radius: 7px;
+}
+
 div.ps-meta {
     font-size: 11px;
+    margin-left: 37px;
 }
 
 div.ps-text {
@@ -209,6 +220,7 @@ div.ps-text {
     font-size: 12px;
     font-family: Roboto, sans-serif;
     color: #eeeeee;
+    margin-left: 50px;
 }
 
 div.ps-meta div.ps-from,

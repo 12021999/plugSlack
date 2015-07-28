@@ -11,7 +11,7 @@
 
 "use strict";
 
-const version = "v0.0.21";
+const version = "v0.0.22";
 const PS_PATH = "https://rawgit.com/MatheusAvellar/plugSlack/master/resources/";
 var ps, slackObj;
 var _all = {
@@ -93,27 +93,39 @@ ps = {
                     slackObj = data;
                     for (var i = 0, l = slackObj.users.length; i < l; i++) {
                         if (!slackObj.users[i].deleted) {
-                            ps.utils.appendItem(slackObj.users[i].name,
-                                slackObj.users[i].id,
-                                "user",
-                                slackObj.users[i].presence);
+                            ps.utils.appendItem(
+                                {
+                                    name: slackObj.users[i].name,
+                                    id: slackObj.users[i].id,
+                                    tag: "user",
+                                    status: slackObj.users[i].presence
+                                }
+                            );
                             _all.users[slackObj.users[i].id] = slackObj.users[i].name;
                         }
 
                     }
                     for (var i = 0, l = slackObj.channels.length; i < l; i++) {
                         if (!slackObj.channels[i].is_archived && slackObj.channels[i].is_member) {
-                            ps.utils.appendItem(slackObj.channels[i].name,
-                                slackObj.channels[i].id,
-                                "channel");
+                            ps.utils.appendItem(
+                                {
+                                    name: slackObj.channels[i].name,
+                                    id: slackObj.channels[i].id,
+                                    tag: "channel"
+                                }
+                            );
                             _all.channels[slackObj.channels[i].id] = slackObj.channels[i].name;
                         }
                     }
                     for (var i = 0, l = slackObj.groups.length; i < l; i++) {
                         if (!slackObj.groups[i].is_archived) {
-                            ps.utils.appendItem(slackObj.groups[i].name,
-                                slackObj.groups[i].id,
-                                "group");
+                            ps.utils.appendItem(
+                                {
+                                    name: slackObj.groups[i].name,
+                                    id: slackObj.groups[i].id,
+                                    tag: "group"
+                                }
+                            );
                             _all.channels[slackObj.groups[i].id] = slackObj.groups[i].name;
                         }
                     }
@@ -134,7 +146,17 @@ ps = {
                             if (h < 10) {  h = "0" + h;  }
                             if (m < 10) {  m = "0" + m;  }
                             const _d = JSON.parse(_data.data);
-                            ps.utils.appendMessage(_d.user, _d.channel, _d.text, h + ":" + m);
+                            ps.utils.appendMessage(
+                                {
+                                    id: _d.user,
+                                    name: _all.users[_d.user],
+                                    prof: slackObj[_d.user].profile.image_32,
+                                    cid: _d.channel,
+                                    channel: _all.channels[_d.channel],
+                                    message: _d.text,
+                                    time: h + ":" + m
+                                }
+                            );
                         }
                         
                     }
@@ -155,42 +177,43 @@ ps = {
         }
     },
     utils: {
-        appendItem: function(name, id, tag, isOnline) {
-            if (tag == "channel") {
+        appendItem: function(obj) {
+            if (obj.tag == "channel") {
                 $("div#ps-chat div.channels-list").append(
-                    "<div class='channel'>"
-                    +    "<div class='channelName'>" + name + "</div>"
+                    "<div class='channel' ps-cid='" + obj.id + "'>"
+                    +    "<div class='channelName'>" + obj.name + "</div>"
                     +"</div>"
                 );
-            } else if (tag == "user") {
+            } else if (obj.tag == "user") {
                 $("div#ps-chat div.users-list").append(
-                    "<div class='user'>"
-                    +    "<div class='presence " + isOnline + "'></div>"
-                    +    "<div class='username'>" + name + "</div>"
+                    "<div class='user' ps-uid='" + obj.id + "'>"
+                    +    "<div class='presence " + obj.status + "'></div>"
+                    +    "<div class='username'>" + obj.name + "</div>"
                     +"</div>"
                 );
             } else {
                 $("div#ps-chat div.groups-list").append(
-                    "<div class='group'>"
-                    +    "<div class='groupName'>" + name + "</div>"
+                    "<div class='group' ps-cid='" + obj.id + "'>"
+                    +    "<div class='groupName'>" + obj.name + "</div>"
                     +"</div>"
                 );
             }
         },
-        appendMessage: function(from, channel, message, time) {
-            if (message) {
-                from = !from ? "" : from;
-                message = message.split("<").join("&lt;").split(">").join("&gt;");
+        appendMessage: function(obj) {
+            if (obj.message) {
+                obj.from = !obj.from ? "" : obj.from;
+                obj.message = obj.message.split("<").join("&lt;").split(">").join("&gt;");
                 const _c = $("div#ps-actual-chat")
                 const _scroll = _c[0].scrollTop > _c[0].scrollHeight -_c.height() - 28;
                 $("#ps-actual-chat").append(
                     "<div class='ps-message'>"
+                    +    "<div class='ps-prof' style='background: url(" + obj.prof + ");'></div>"
                     +    "<div class='ps-meta'>"
-                    +        "<div class='ps-from'>" + _all.users[from] + "</div>"
+                    +        "<div class='ps-from' ps-id='" + obj.id + "'>" + obj.name + "</div>"
                     +        "<div class='ps-time'>" + time + "</div>"
-                    +        "<div class='ps-channel'>" + _all.channels[channel] + "</div>"
+                    +        "<div class='ps-channel' ps-cid='" + obj.cid + "'>" + obj.channel + "</div>"
                     +    "</div>"
-                    +    "<div class='ps-text'>" + message + "</div>"
+                    +    "<div class='ps-text'>" + obj.message + "</div>"
                     +"</div>"
                 );
                 if (_scroll) {
