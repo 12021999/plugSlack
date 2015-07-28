@@ -11,7 +11,7 @@
 
 "use strict";
 
-const version = "v0.0.22";
+const version = "v0.0.23";
 const PS_PATH = "https://rawgit.com/MatheusAvellar/plugSlack/master/resources/";
 var ps, slackObj;
 var _all = {
@@ -101,7 +101,10 @@ ps = {
                                     status: slackObj.users[i].presence
                                 }
                             );
-                            _all.users[slackObj.users[i].id] = slackObj.users[i].name;
+                            _all.users[slackObj.users[i].id] = {
+                                name: slackObj.users[i].name,
+                                prof: slackObj.users[i].profile
+                            }
                         }
 
                     }
@@ -149,8 +152,8 @@ ps = {
                             ps.utils.appendMessage(
                                 {
                                     id: _d.user,
-                                    name: _all.users[_d.user],
-                                    prof: slackObj[_d.user].profile.image_32,
+                                    name: _all.users[_d.user].name,
+                                    prof: _all.users[_d.user].profile.image_32,
                                     cid: _d.channel,
                                     channel: _all.channels[_d.channel],
                                     message: _d.text,
