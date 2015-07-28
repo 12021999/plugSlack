@@ -11,7 +11,7 @@
 
 "use strict";
 
-const version = "v0.0.24";
+const version = "v0.0.25";
 const PS_PATH = "https://rawgit.com/MatheusAvellar/plugSlack/master/resources/";
 var ps, slackObj;
 var _all = {
@@ -149,11 +149,12 @@ ps = {
                             if (h < 10) {  h = "0" + h;  }
                             if (m < 10) {  m = "0" + m;  }
                             const _d = JSON.parse(_data.data);
+                            console.log(_d);
                             ps.utils.appendMessage(
                                 {
                                     id: _d.user,
                                     name: _all.users[_d.user].name,
-                                    prof: _all.users[_d.user].profile.image_32,
+                                    prof: _all.users[_d.user].prof.image_32,
                                     cid: _d.channel,
                                     channel: _all.channels[_d.channel],
                                     message: _d.text,
