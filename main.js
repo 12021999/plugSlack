@@ -11,7 +11,7 @@
 
 "use strict";
 
-const version = "v0.0.31";
+const version = "v0.0.32";
 const PS_PATH = "https://rawgit.com/MatheusAvellar/plugSlack/master/resources/";
 var ps, slackObj, tkn, cn;
 var _all = {
@@ -93,6 +93,7 @@ ps = {
                 success: function(data) {
                     $("div.ps-start").remove();
                     slackObj = data;
+                    var _sl;
                     for (var i = 0, l = slackObj.users.length; i < l; i++) {
                         if (!slackObj.users[i].deleted) {
                             for (var j = 0, k = slackObj.ims.length; j < k; j++) {
@@ -111,14 +112,28 @@ ps = {
                                         prof: slackObj.users[i].profile
                                     }
                                     if (slackObj.users[i].name == "slackbot") {
-                                        ps.utils.loadHistory(slackObj.ims[j].id);
+                                        _sl = j;
                                     }
-                                    break;
-                                } 
+                                } else if (slackObj.users[i].name == slackObj.self.name) {
+                                    console.log("----Your name----");
+                                    ps.utils.appendItem(
+                                        {
+                                            name: slackObj.users[i].name,
+                                            id: slackObj.users[i].id,
+                                            tag: "user",
+                                            status: slackObj.users[i].presence
+                                        }
+                                    );
+                                    _all.users[slackObj.users[i].id] = {
+                                        name: slackObj.users[i].name,
+                                        prof: slackObj.users[i].profile
+                                    }
+                                }
                             }
                         }
 
                     }
+                    ps.utils.loadHistory(slackObj.ims[_sl].id);
                     for (var i = 0, l = slackObj.channels.length; i < l; i++) {
                         if (!slackObj.channels[i].is_archived && slackObj.channels[i].is_member) {
                             ps.utils.appendItem(
@@ -167,16 +182,14 @@ ps = {
 
                     slackWS.onmessage = function(_data){
                         console.log(_data);
-                        const _d = JSON.parse(_data.data);
+                        var _d = JSON.parse(_data.data);
                         if (_d.type == "message") {
-                            const d = new Date();
+                            var d = new Date();
                             var h = d.getHours();
                             var m = d.getMinutes();
                             if (h < 10) {  h = "0" + h;  }
                             if (m < 10) {  m = "0" + m;  }
-                            const _u = _all.users[_d.user] ? _all.users[_d.user] :
-                                        _all.users[_d.username] ? _all.users[_d.username] :
-                                        _all.users[_d.message.user];
+                            var _u = _all.users[_d.user] ? _all.users[_d.user] : _all.users[_d.username];
                             if (_all.users[_u]) {
                                 ps.utils.appendMessage(
                                     {
@@ -191,19 +204,19 @@ ps = {
                                 );
                             }
                         } else if (_d.type == "presence_change" || _d.type == "manual_presence_change") {
-                            const _user = _d.user ? _d.user : slackObj.self.id;
+                            var _user = _d.user ? _d.user : slackObj.self.id;
                             $("div.users-list div.user[ps-uid^='" + _user + "'] div.presence")
                                 .attr("class", "presence " + _d.presence);
                         } else if (_d.type == "user_change") {
                             if (!_d.user.deleted) {
-                                const _uid = _d.user.id;
-                                const _un = _d.user.name;
+                                var _uid = _d.user.id;
+                                var _un = _d.user.name;
                                 _all.users[_uid] = _un;
                                 $("div.users-list div.user[ps-uid^='" + _uid + "'] div.username")
                                     .text(_un);
                             } else {
-                                const _uid = _d.user.id;
-                                delete _all.users[_uid];
+                                var _uid = _d.user.id;
+                                //delete _all.users[_uid];
                                 $("div.users-list div.user[ps-uid^='" + _uid + "']")
                                     .remove();
                             }
@@ -234,7 +247,7 @@ ps = {
                     +"</div>"
                 );
             } else if (obj.tag == "user") {
-                const _isSlackbot = obj.name == " selected" ? selected : "";
+                var _isSlackbot = obj.name == " selected" ? selected : "";
                 $("div#ps-chat div.users-list").append( 
                     "<div class='user" + _isSlackbot + "' ps-uid='" + obj.id + "' ps-cid='" + obj.ims + "'>"
                     +    "<div class='presence " + obj.status + "'></div>"
@@ -253,8 +266,8 @@ ps = {
             if (obj.message) {
                 obj.from = !obj.from ? "" : obj.from;
                 obj.message = obj.message.split("<").join("&lt;").split(">").join("&gt;");
-                const _c = $("div#ps-actual-chat")
-                const _scroll = _c[0].scrollTop > _c[0].scrollHeight -_c.height() - 28;
+                var _c = $("div#ps-actual-chat")
+                var _scroll = _c[0].scrollTop > _c[0].scrollHeight -_c.height() - 28;
                 $("#ps-actual-chat").append(
                     "<div class='ps-message'>"
                     +    "<div class='ps-prof' style='background: url(" + obj.prof + ");'></div>"
@@ -272,16 +285,40 @@ ps = {
             }
         },
         loadHistory: function(cid) {
-            $.ajax({
-                type: "GET",
-                url: "https://slack.com/api/channels.history?token=" + tkn + "&channel=" + cid,
-                success: function(data) {
-                    console.log(data);
-                },
-                error: function(data) {
-                    console.log(data);
-                }
-            });
+            if (cid && cid.toString()) {
+                var _l = cid.trim()[0] == "D" ? "im" : cid.trim()[0] == "C" ? "channels" : "groups";
+                $.ajax({
+                    type: "GET",
+                    url: "https://slack.com/api/" + _l + ".history?token=" + tkn + "&channel=" + cid,
+                    success: function(data) {
+                        if (data.ok) {
+                            for (var i = data.messages.length - 1, l = -1; i > l; i--) {
+                                var _u = data.messages[i].user;
+                                console.log(data.messages[i]);
+                                console.log(_u);
+                                console.log(_all.users[_u]);
+                                console.log(_all.users);
+                                console.log(_all.users.length);
+                                ps.utils.appendMessage(
+                                    {
+                                        id: _u,
+                                        name: _all.users[_u].name,
+                                        prof: _all.users[_u].prof.image_32,
+                                        cid: cid,
+                                        channel: _all.channels[cid],
+                                        message: data.messages[i].text,
+                                        time: data.messages[i].ts
+                                    }
+                                );
+                            }
+                        }
+                        console.log(data);
+                    },
+                    error: function(data) {
+                        console.log(data);
+                    }
+                });
+            }
         }
     }
 };
