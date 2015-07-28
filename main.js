@@ -11,9 +11,14 @@
 
 "use strict";
 
-const version = "v0.0.20";
+const version = "v0.0.21";
 const PS_PATH = "https://rawgit.com/MatheusAvellar/plugSlack/master/resources/";
 var ps, slackObj;
+var _all = {
+    users: {},
+    channels: {}
+};
+
 $.ajax({
 type: "GET",
 url: PS_PATH + "styles.css",
@@ -79,7 +84,6 @@ ps = {
     },
     start: function() {
         var slackWS;
-        var allUsers = {};
         if ($("input#ps-token").val()) {
             $.ajax({
                 type: "GET",
@@ -93,7 +97,7 @@ ps = {
                                 slackObj.users[i].id,
                                 "user",
                                 slackObj.users[i].presence);
-                            allUsers[slackObj.users[i].id] = slackObj.users[i].name;
+                            _all.users[slackObj.users[i].id] = slackObj.users[i].name;
                         }
 
                     }
@@ -102,6 +106,7 @@ ps = {
                             ps.utils.appendItem(slackObj.channels[i].name,
                                 slackObj.channels[i].id,
                                 "channel");
+                            _all.channels[slackObj.channels[i].id] = slackObj.channels[i].name;
                         }
                     }
                     for (var i = 0, l = slackObj.groups.length; i < l; i++) {
@@ -109,6 +114,7 @@ ps = {
                             ps.utils.appendItem(slackObj.groups[i].name,
                                 slackObj.groups[i].id,
                                 "group");
+                            _all.channels[slackObj.groups[i].id] = slackObj.groups[i].name;
                         }
                     }
                     console.log("Connecting account " + slackObj.self.name);
@@ -180,9 +186,9 @@ ps = {
                 $("#ps-actual-chat").append(
                     "<div class='ps-message'>"
                     +    "<div class='ps-meta'>"
-                    +        "<div class='ps-from'>" + allUsers[from] + "</div>"
+                    +        "<div class='ps-from'>" + _all.users[from] + "</div>"
                     +        "<div class='ps-time'>" + time + "</div>"
-                    +        "<div class='ps-channel'>" + channel + "</div>"
+                    +        "<div class='ps-channel'>" + _all.channels[channel] + "</div>"
                     +    "</div>"
                     +    "<div class='ps-text'>" + message + "</div>"
                     +"</div>"
