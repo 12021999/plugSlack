@@ -115,6 +115,7 @@ div#ps-chat div.channels-list div.channel.selected,
 div#ps-chat div.groups-list div.group.selected {
     background-color: #444A59 !important;
     outline: 1px solid #8694B2;
+    cursor: default;
 }
 
 div#ps-chat div.users-list div.presence {

@@ -11,9 +11,9 @@
 
 "use strict";
 
-const version = "v0.0.30";
+const version = "v0.0.31";
 const PS_PATH = "https://rawgit.com/MatheusAvellar/plugSlack/master/resources/";
-var ps, slackObj, tkn;
+var ps, slackObj, tkn, cn;
 var _all = {
     users: {},
     channels: {}
@@ -95,17 +95,26 @@ ps = {
                     slackObj = data;
                     for (var i = 0, l = slackObj.users.length; i < l; i++) {
                         if (!slackObj.users[i].deleted) {
-                            ps.utils.appendItem(
-                                {
-                                    name: slackObj.users[i].name,
-                                    id: slackObj.users[i].id,
-                                    tag: "user",
-                                    status: slackObj.users[i].presence
-                                }
-                            );
-                            _all.users[slackObj.users[i].id] = {
-                                name: slackObj.users[i].name,
-                                prof: slackObj.users[i].profile
+                            for (var j = 0, k = slackObj.ims.length; j < k; j++) {
+                                if (slackObj.users[i].id == slackObj.ims[j].user) {
+                                    ps.utils.appendItem(
+                                        {
+                                            name: slackObj.users[i].name,
+                                            id: slackObj.users[i].id,
+                                            ims: slackObj.ims[j].id,
+                                            tag: "user",
+                                            status: slackObj.users[i].presence
+                                        }
+                                    );
+                                    _all.users[slackObj.users[i].id] = {
+                                        name: slackObj.users[i].name,
+                                        prof: slackObj.users[i].profile
+                                    }
+                                    if (slackObj.users[i].name == "slackbot") {
+                                        ps.utils.loadHistory(slackObj.ims[j].id);
+                                    }
+                                    break;
+                                } 
                             }
                         }
 
@@ -143,6 +152,8 @@ ps = {
                             + "div.user.selected, "
                             + "div.group.selected").removeClass("selected");
                             $(this).addClass("selected");
+                            cn = $(this).attr("ps-cid");
+                            console.log(cn);
                         }
                     });
 
@@ -223,8 +234,9 @@ ps = {
                     +"</div>"
                 );
             } else if (obj.tag == "user") {
-                $("div#ps-chat div.users-list").append(
-                    "<div class='user' ps-uid='" + obj.id + "'>"
+                const _isSlackbot = obj.name == " selected" ? selected : "";
+                $("div#ps-chat div.users-list").append( 
+                    "<div class='user" + _isSlackbot + "' ps-uid='" + obj.id + "' ps-cid='" + obj.ims + "'>"
                     +    "<div class='presence " + obj.status + "'></div>"
                     +    "<div class='username'>" + obj.name + "</div>"
                     +"</div>"
@@ -258,6 +270,18 @@ ps = {
                     $("div#ps-actual-chat")[0].scrollTop = _c[0].scrollHeight;
                 }
             }
+        },
+        loadHistory: function(cid) {
+            $.ajax({
+                type: "GET",
+                url: "https://slack.com/api/channels.history?token=" + tkn + "&channel=" + cid,
+                success: function(data) {
+                    console.log(data);
+                },
+                error: function(data) {
+                    console.log(data);
+                }
+            });
         }
     }
 };
