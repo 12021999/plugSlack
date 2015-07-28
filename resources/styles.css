@@ -110,6 +110,13 @@ div#ps-chat div.groups-list div.group {
     cursor: pointer;
 }
 
+div#ps-chat div.users-list div.user.selected,
+div#ps-chat div.channels-list div.channel.selected,
+div#ps-chat div.groups-list div.group.selected {
+    background-color: #444A59 !important;
+    outline: 1px solid #8694B2;
+}
+
 div#ps-chat div.users-list div.presence {
     height: 10px;
     width: 10px;

@@ -11,7 +11,7 @@
 
 "use strict";
 
-const version = "v0.0.27";
+const version = "v0.0.29";
 const PS_PATH = "https://rawgit.com/MatheusAvellar/plugSlack/master/resources/";
 var ps, slackObj, tkn;
 var _all = {
@@ -134,6 +134,18 @@ ps = {
                             _all.channels[slackObj.groups[i].id] = slackObj.groups[i].name;
                         }
                     }
+
+                    $("div#ps-chat div.channels-list div.channel, "
+                    + "div#ps-chat div.users-list div.user, "
+                    + "div#ps-chat div.groups-list div.group").on("click", function() {
+                        if (!$(this).hasClass("selected")) {
+                            $("div.channel.selected, "
+                            + "div.user.selected, "
+                            + "div.group.selected").removeClass("selected");
+                            $(this).addClass("selected");
+                        }
+                    });
+
                     console.log("Connecting account " + slackObj.self.name);
                     slackWS = new WebSocket(slackObj.url);
 
@@ -151,12 +163,15 @@ ps = {
                             var m = d.getMinutes();
                             if (h < 10) {  h = "0" + h;  }
                             if (m < 10) {  m = "0" + m;  }
-                            if (_all.users[_d.user]) {
+                            const _u = _all.users[_d.user] ? _all.users[_d.user] :
+                                        _all.users[_d.username] ? _all.users[_d.username] :
+                                        _all.users[_d.message.user];
+                            if (_all.users[_u]) {
                                 ps.utils.appendMessage(
                                     {
-                                        id: _d.user,
-                                        name: _all.users[_d.user].name,
-                                        prof: _all.users[_d.user].prof.image_32,
+                                        id: _u,
+                                        name: _all.users[_u].name,
+                                        prof: _all.users[_u].prof.image_32,
                                         cid: _d.channel,
                                         channel: _all.channels[_d.channel],
                                         message: _d.text,
