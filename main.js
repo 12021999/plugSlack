@@ -11,7 +11,7 @@
 
 "use strict";
 
-const version = "v0.0.19";
+const version = "v0.0.20";
 const PS_PATH = "https://rawgit.com/MatheusAvellar/plugSlack/master/resources/";
 var ps, slackObj;
 $.ajax({
@@ -79,6 +79,7 @@ ps = {
     },
     start: function() {
         var slackWS;
+        var allUsers = {};
         if ($("input#ps-token").val()) {
             $.ajax({
                 type: "GET",
@@ -87,11 +88,14 @@ ps = {
                     $("div.ps-start").remove();
                     slackObj = data;
                     for (var i = 0, l = slackObj.users.length; i < l; i++) {
-                        if (!slackObj.users[i].deleted)
+                        if (!slackObj.users[i].deleted) {
                             ps.utils.appendItem(slackObj.users[i].name,
                                 slackObj.users[i].id,
                                 "user",
                                 slackObj.users[i].presence);
+                            allUsers[slackObj.users[i].id] = slackObj.users[i].name;
+                        }
+
                     }
                     for (var i = 0, l = slackObj.channels.length; i < l; i++) {
                         if (!slackObj.channels[i].is_archived && slackObj.channels[i].is_member) {
@@ -176,7 +180,7 @@ ps = {
                 $("#ps-actual-chat").append(
                     "<div class='ps-message'>"
                     +    "<div class='ps-meta'>"
-                    +        "<div class='ps-from'>" + from + "</div>"
+                    +        "<div class='ps-from'>" + allUsers[from] + "</div>"
                     +        "<div class='ps-time'>" + time + "</div>"
                     +        "<div class='ps-channel'>" + channel + "</div>"
                     +    "</div>"
