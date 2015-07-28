@@ -11,7 +11,7 @@
 
 "use strict";
 
-const version = "v0.0.23";
+const version = "v0.0.24";
 const PS_PATH = "https://rawgit.com/MatheusAvellar/plugSlack/master/resources/";
 var ps, slackObj;
 var _all = {
@@ -84,10 +84,10 @@ ps = {
     },
     start: function() {
         var slackWS;
-        if ($("input#ps-token").val()) {
+        if ($("input#ps-token").val().trim()) {
             $.ajax({
                 type: "GET",
-                url: "https://slack.com/api/rtm.start?token=" + $("input#ps-token").val(),
+                url: "https://slack.com/api/rtm.start?token=" + $("input#ps-token").val().trim(),
                 success: function(data) {
                     $("div.ps-start").remove();
                     slackObj = data;
