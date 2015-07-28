@@ -11,7 +11,7 @@
 
 "use strict";
 
-const version = "v0.0.29";
+const version = "v0.0.30";
 const PS_PATH = "https://rawgit.com/MatheusAvellar/plugSlack/master/resources/";
 var ps, slackObj, tkn;
 var _all = {
@@ -180,9 +180,22 @@ ps = {
                                 );
                             }
                         } else if (_d.type == "presence_change" || _d.type == "manual_presence_change") {
-                            var _user = _d.user ? _d.user : slackObj.self.id;
+                            const _user = _d.user ? _d.user : slackObj.self.id;
                             $("div.users-list div.user[ps-uid^='" + _user + "'] div.presence")
                                 .attr("class", "presence " + _d.presence);
+                        } else if (_d.type == "user_change") {
+                            if (!_d.user.deleted) {
+                                const _uid = _d.user.id;
+                                const _un = _d.user.name;
+                                _all.users[_uid] = _un;
+                                $("div.users-list div.user[ps-uid^='" + _uid + "'] div.username")
+                                    .text(_un);
+                            } else {
+                                const _uid = _d.user.id;
+                                delete _all.users[_uid];
+                                $("div.users-list div.user[ps-uid^='" + _uid + "']")
+                                    .remove();
+                            }
                         }
                     }
 
