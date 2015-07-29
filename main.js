@@ -11,7 +11,7 @@
 
 "use strict";
 
-const version = "v0.0.33";
+const version = "v0.0.34";
 const PS_PATH = "https://rawgit.com/MatheusAvellar/plugSlack/master/resources/";
 var ps, slackObj, tkn, cn;
 var _all = {
@@ -299,17 +299,21 @@ ps = {
                         if (data.ok) {
                             for (var i = data.messages.length - 1, l = -1; i > l; i--) {
                                 var _u = data.messages[i].user;
-                                ps.utils.appendMessage(
-                                    {
-                                        id: _u,
-                                        name: _all.users[_u].name,
-                                        prof: _all.users[_u].prof.image_32,
-                                        cid: cid,
-                                        channel: _all.channels[cid],
-                                        message: data.messages[i].text,
-                                        time: data.messages[i].ts
-                                    }
-                                );
+                                if (_all.users[_u]) {
+                                    ps.utils.appendMessage(
+                                        {
+                                            id: _u,
+                                            name: _all.users[_u].name,
+                                            prof: _all.users[_u].prof.image_32,
+                                            cid: cid,
+                                            channel: _all.channels[cid],
+                                            message: data.messages[i].text,
+                                            time: data.messages[i].ts
+                                        }
+                                    );
+                                } else {
+                                    console.log("-=[Error @ 315]=-\n" + _ul);
+                                }
                             }
                         }
                     },
