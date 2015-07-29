@@ -11,7 +11,7 @@
 
 "use strict";
 
-const version = "v0.0.35";
+const version = "v0.0.36";
 const PS_PATH = "https://rawgit.com/MatheusAvellar/plugSlack/master/resources/";
 var ps, slackObj, slackWS, tkn, cn;
 var _all = {
@@ -207,7 +207,7 @@ ps = {
                                 if (_p.image_32) {  _p = _p.image_32;  } else {  _p = _p.image_48;  }
                                 ps.utils.appendMessage(
                                     {
-                                        message: _data.text,
+                                        message: ps.utils.format(_data.text),
                                         name: current.user,
                                         id: _data.user,
                                         prof: _p,
@@ -348,14 +348,16 @@ ps = {
                             _final = _message;
                         }
                     }
-                    if (_final.indexOf("<http") != -1) {
-                        _message = _final.replace("<http", "!§a href='http");
-                        if (_message.indexOf(">") > _final.indexOf("<https")) {
-                            _message = _message.replace(">", "' target='_blank' class='ps-link'§!Link!§/a§!");
-                            _final = _message;
-                        }
+                }/*
+                if (_final.indexOf("<http") != -1) {
+                    var _in = _final.indexOf("<http");
+                    _message = _final.replace("<http", "!§a href='http");
+                    if (_message.indexOf(">") > _final.indexOf("<http")) {
+                        var _a = _final.substr(_in + 1, _final.indexOf(">") - 1);
+                        _message = _message.replace(">", "' target='_blank' class='ps-link'§!" + _a + "!§/a§!");
+                        _final = _message;
                     }
-                }
+                }*/
             }
             return _final;
         },
