@@ -199,7 +199,7 @@ input#ps-token {
     border: 0px;
     padding: 5px;
     margin-right: 10px;
-    font-family: "roboto";
+    font-family: Roboto, sans-serif;
     width: 195px;
     font-size: 8px;
     margin-left: -10px;
@@ -210,10 +210,11 @@ input#ps-submit {
     left: 10px;
     position: absolute;
     width: calc(100% - 30px);
+    font-family: Roboto, sans-serif;
     border: 0px;
     background-color: #282c35;
     color: #ededed;
-    padding: 5px;
+    padding: 3px;
 }
 
 div#ps-actual-chat {
@@ -258,6 +259,15 @@ div.ps-text {
     font-family: Roboto, sans-serif;
     color: #eeeeee;
     margin-left: 50px;
+}
+
+div.ps-quote {
+    display: inline;
+    margin: 2px;
+    color: #595a5c;
+}
+div.ps-quote:before {
+    content: "▍";
 }
 
 div.ps-meta div.ps-from,

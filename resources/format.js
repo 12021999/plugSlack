@@ -1,6 +1,9 @@
 if (ps) {
     ps.utils.format = function(message) {
         var _final = message;
+        if (_final[0] == ">") {
+            _final = "!§div class='ps-quote'§!!§/div§!" + _final;
+        }
         var _formats = [
             {c: "*", r: "b"},
             {c: "_", r: "em"},
