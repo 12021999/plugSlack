@@ -117,6 +117,12 @@ div#ps-chat div.groups-list div.group {
     cursor: pointer;
 }
 
+div#ps-chat div.users-list div.user.new,
+div#ps-chat div.channels-list div.channel.new,
+div#ps-chat div.groups-list div.group.new {
+    font-weight: bold;
+}
+
 div#ps-chat div.users-list div.user.selected,
 div#ps-chat div.channels-list div.channel.selected,
 div#ps-chat div.groups-list div.group.selected {
@@ -270,6 +276,35 @@ div.ps-meta div.ps-time {
     right: 10px;
     position: absolute;
     color: #555d70;
+}
+
+pre.ps-pre-small {
+    padding: 2px;
+    background-color: rgba(40, 44, 53, 0.25);
+    border-radius: 4px;
+    display: inline;
+    color: #c59840;
+}
+
+pre.ps-pre-big {
+    padding: 7px;
+    margin: 5px 0px 5px 0px;
+    background-color: #282c35;
+    border-radius: 4px;
+}
+
+a.ps-link {
+    color: #009cdd;
+}
+
+div.ps-nothing-here {
+    text-align: center;
+    padding-top: 50px;
+    color: #8694B2;
+}
+
+div.ps-nothing-here:before {
+    content: "No retrievable history";
 }
 
 /* ---------------------------------- */
