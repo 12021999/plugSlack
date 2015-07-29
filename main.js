@@ -11,7 +11,7 @@
 
 "use strict";
 
-const version = "v0.0.32";
+const version = "v0.0.33";
 const PS_PATH = "https://rawgit.com/MatheusAvellar/plugSlack/master/resources/";
 var ps, slackObj, tkn, cn;
 var _all = {
@@ -23,7 +23,7 @@ $.ajax({
 type: "GET",
 url: PS_PATH + "styles.css",
 success: function(_ajxData) {
-    console.log("Successfully loaded the CSS");
+    //console.log("Successfully loaded the CSS");
     $("head").append(
         "<link "
         +    " rel='stylesheet' "
@@ -93,11 +93,14 @@ ps = {
                 success: function(data) {
                     $("div.ps-start").remove();
                     slackObj = data;
-                    var _sl;
                     for (var i = 0, l = slackObj.users.length; i < l; i++) {
+                        console.log("A");
                         if (!slackObj.users[i].deleted) {
+                            console.log("B");
                             for (var j = 0, k = slackObj.ims.length; j < k; j++) {
+                                console.log("C");
                                 if (slackObj.users[i].id == slackObj.ims[j].user) {
+                                    console.log("D");
                                     ps.utils.appendItem(
                                         {
                                             name: slackObj.users[i].name,
@@ -111,11 +114,11 @@ ps = {
                                         name: slackObj.users[i].name,
                                         prof: slackObj.users[i].profile
                                     }
-                                    if (slackObj.users[i].name == "slackbot") {
-                                        _sl = j;
-                                    }
+                                    break
                                 } else if (slackObj.users[i].name == slackObj.self.name) {
-                                    console.log("----Your name----");
+                                    console.log("----E----");
+                                    console.log(i);
+                                    console.log(slackObj.users[i].id);
                                     ps.utils.appendItem(
                                         {
                                             name: slackObj.users[i].name,
@@ -128,12 +131,13 @@ ps = {
                                         name: slackObj.users[i].name,
                                         prof: slackObj.users[i].profile
                                     }
+                                    break;
                                 }
                             }
                         }
-
                     }
-                    ps.utils.loadHistory(slackObj.ims[_sl].id);
+                    $("div.users-list div.user[ps-uid^='USLACKBOT']").addClass("selected");
+                    ps.utils.loadHistory(slackObj.ims[0].id);
                     for (var i = 0, l = slackObj.channels.length; i < l; i++) {
                         if (!slackObj.channels[i].is_archived && slackObj.channels[i].is_member) {
                             ps.utils.appendItem(
@@ -166,9 +170,10 @@ ps = {
                             $("div.channel.selected, "
                             + "div.user.selected, "
                             + "div.group.selected").removeClass("selected");
+                            $("div.ps-message").remove();
                             $(this).addClass("selected");
                             cn = $(this).attr("ps-cid");
-                            console.log(cn);
+                            ps.utils.loadHistory(cn);
                         }
                     });
 
@@ -294,11 +299,6 @@ ps = {
                         if (data.ok) {
                             for (var i = data.messages.length - 1, l = -1; i > l; i--) {
                                 var _u = data.messages[i].user;
-                                console.log(data.messages[i]);
-                                console.log(_u);
-                                console.log(_all.users[_u]);
-                                console.log(_all.users);
-                                console.log(_all.users.length);
                                 ps.utils.appendMessage(
                                     {
                                         id: _u,
@@ -312,7 +312,6 @@ ps = {
                                 );
                             }
                         }
-                        console.log(data);
                     },
                     error: function(data) {
                         console.log(data);

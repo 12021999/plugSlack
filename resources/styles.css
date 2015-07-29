@@ -221,10 +221,14 @@ div#ps-actual-chat {
 }
 
 div.ps-message {
-    min-height: 46px;
+    min-height: 38px;
     max-width: 320px;
     word-wrap: break-word;
     padding: 5px 8px 6px 0px;
+}
+
+div#ps-actual-chat div.ps-message:nth-child(even) {
+    background-color: #111317;
 }
 
 div.ps-prof {
