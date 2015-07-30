@@ -90,6 +90,11 @@ if (ps) {
                             $("div.ps-message").remove();
                             $("div.ps-nothing-here").remove();
                             $(this).addClass("selected").removeClass("new");
+                            var _t = $(this).attr("class")[0] == "c" ? "channel" :
+                                     $(this).attr("class")[0] == "u" ? "user" : "group";
+                            if (!$("div." + _t).hasClass("new")) {
+                                $("div#ps-" + _t + "s-button").removeClass("new");
+                            }
                             cn = $(this).attr("ps-cid");
                             ps.utils.loadHistory(cn);
                         }
