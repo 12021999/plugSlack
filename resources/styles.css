@@ -71,8 +71,43 @@ div#ps-header {
     background-color: #282c35;
 }
 
+div#ps-slack-button {
+    width: calc(3 * 15px);
+    height: 100%;
+    float: left;
+    cursor: pointer;
+    background-color: #009cdd;
+}
+div#ps-slack-button a.ps-url {
+    width: 100%;
+    height: 100%;
+    background-color: #009cdd;
+    display: block;
+}
+div#tooltip.ps-tooltip {
+    top: 15px;
+    left: 195px;
+    display: none;
+}
+div#tooltip.ps-tooltip span:before {
+    content: "Enter on slack.com";
+}
+div#tooltip.ps-tooltip div {
+    top: 0px;
+    right: -12px;
+    bottom: auto;
+    left: auto;
+    border-top: 0px solid transparent;
+    border-right: 0 solid transparent;
+    border-bottom: 16px solid transparent;
+    border-left: 16px solid #555d70;
+}
+div#ps-slack-button a.ps-url:hover > div#tooltip.ps-tooltip {
+    display: block;
+}
+
 div.ps-btn {
-    width: 115px;
+    width: calc(100% / 3 + 15px);
     height: 100%;
     float: left;
     text-align: center;

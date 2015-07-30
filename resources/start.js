@@ -8,6 +8,8 @@ if (ps) {
                 success: function(data) {
                     $("div.ps-start").remove();
                     slackObj = data;
+                    $("div#ps-slack-button a.ps-url")
+                        .attr("href", "https://" + slackObj.team.domain + ".slack.com/messages/@slackbot/");
                     for (var i = 0, l = slackObj.users.length; i < l; i++) {
                         if (!slackObj.users[i].deleted) {
                             for (var j = 0, k = slackObj.ims.length; j < k; j++) {
