@@ -11,7 +11,7 @@
 
 "use strict";
 
-const version = "v0.0.40";
+const version = "v0.0.41";
 const PS_PATH = "https://rawgit.com/MatheusAvellar/plugSlack/master/resources/";
 var ps = {};
 var _all = {

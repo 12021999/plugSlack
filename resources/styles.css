@@ -84,6 +84,12 @@ div.ps-btn.selected {
     background-color: #0a0a0a;
     cursor: default;
 }
+div.ps-btn.new:after {
+    content: " *";
+    font-size: 10px;
+    font-weight: bold;
+}
+
 div.ps-btn span.ps-count {
     position: absolute;
     color: #808691;

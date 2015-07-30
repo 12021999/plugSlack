@@ -136,7 +136,9 @@ if (ps) {
                             } else if (_data.channel) {
                                 var _cid = _data.channel;
                                 var _l = _cid.trim()[0] == "D" ? "user" : _cid.trim()[0] == "C" ? "channel" : "group";
-                                $("div." + _l + "[ps-cid^='" + _cid + "']").addClass("new");
+                                var _e = ["div." + _l + "[ps-cid^='" + _cid + "']", "div#ps-" + _l + "s-button.ps-btn"];
+                                if (!$(_e[0]).hasClass("selected")) {  $(_e[0]).addClass("new");  }
+                                if (!$(_e[1]).hasClass("selected")) {  $(_e[1]).addClass("new");  }
                             }
                         }
                     }

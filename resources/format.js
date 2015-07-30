@@ -19,7 +19,11 @@ if (ps) {
                         _final = _message;
                     }
                 }
-            }/*
+            }
+            /*var _f = _final.indexOf("<@");
+            if (_f != -1) {
+            }*/
+            /*
             if (_final.indexOf("<http") != -1) {
                 var _in = _final.indexOf("<http");
                 _message = _final.replace("<http", "!§a href='http");
