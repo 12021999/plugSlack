@@ -11,7 +11,7 @@
 
 "use strict";
 
-const version = "v0.0.42";
+const version = "v0.0.43";
 const PS_PATH = "https://rawgit.com/MatheusAvellar/plugSlack/master/resources/";
 var ps = {};
 var _all = {
@@ -63,8 +63,8 @@ ps = {
             +    "<div class='groups-list ps-list'></div>"
             +    "<div id='ps-actual-chat'></div>"
             +    "<div class='ps-start'>"
-            +         "<input onclick='return ps.start();' id='ps-token' placeholder='Insert your token here!'>"
-            +         "Start plugSlack"
+            +         "<input id='ps-token' placeholder='Insert your token here!'>"
+            +         "<span class='ps-st' onclick='return ps.start();'>Start plugSlack</span>"
             +    "</div>"
             +    "<input id='ps-submit' placeholder='Type a message' />"
             +"</div>"

@@ -198,10 +198,14 @@ div.ps-start {
     padding: 20px;
     height: 15px;
     text-align: center;
-    cursor: pointer;
+    cursor: default;
     width: calc(100% - 40px);
     padding-top: 10px;
     margin: 0px;
+}
+
+div.ps-start span.ps-st {
+    cursor: pointer;
 }
 
 input#ps-token {
