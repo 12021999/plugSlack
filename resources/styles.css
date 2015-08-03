@@ -93,21 +93,21 @@ div#tooltip.ps-tooltip span:before {
     content: "Enter on slack.com";
 }
 div#tooltip.ps-tooltip div {
-    top: 0px;
-    right: -12px;
+    top: 2px;
+    right: -30px;
+    position: absolute;
     bottom: auto;
-    left: auto;
     border-top: 0px solid transparent;
-    border-right: 0 solid transparent;
-    border-bottom: 16px solid transparent;
-    border-left: 16px solid #555d70;
+    border-right: 15px solid transparent;
+    border-bottom: 15px solid transparent;
+    border-left: 15px solid #555d70;
 }
-div#ps-slack-button a.ps-url:hover > div#tooltip.ps-tooltip {
+div#ps-slack-button:hover div#tooltip.ps-tooltip {
     display: block;
 }
 
 div.ps-btn {
-    width: calc(100% / 3 + 15px);
+    width: calc(100% / 3 - 15px);
     height: 100%;
     float: left;
     text-align: center;

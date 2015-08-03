@@ -11,7 +11,7 @@
 
 "use strict";
 
-const version = "v0.0.44";
+const version = "v0.0.45";
 const PS_PATH = "https://rawgit.com/MatheusAvellar/plugSlack/master/resources/";
 var ps = {};
 var _all = {
@@ -59,7 +59,7 @@ ps = {
             +        "<div id='ps-groups-button' class='ps-btn'>groups</div>"
             +        "<div id='ps-slack-button'>"
             +            "<a class='ps-url' target='_blank'></a>"
-            +            "<div id='tooltip'>"
+            +            "<div id='tooltip' class='ps-tooltip'>"
             +                "<span></span><div></div>"
             +            "</div>"
             +        "</div>"
